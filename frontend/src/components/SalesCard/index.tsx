@@ -18,10 +18,22 @@ function SalesCard() {
   const [sales, setSales] = useState<Sale[]>([]);
 
   useEffect(() => {
-    axios.get(`${BASE_URL}/sales`).then((res) => {
-      setSales(res.data.content);
-    });
-  }, []);
+    var dmin = min.toISOString().slice(0, 10);
+    var dmax = max.toISOString().slice(0, 10);
+    if (minDate != null) {
+      dmin = minDate.toISOString().slice(0, 10);
+    }
+    if (maxDate != null) {
+      dmax = maxDate.toISOString().slice(0, 10);
+    }
+
+    axios
+      .get(`${BASE_URL}/sales?minDate=${dmin}&maxDate=${dmax}`)
+      .then((res) => {
+        console.log(res.request);
+        setSales(res.data.content);
+      });
+  }, [minDate, maxDate]);
 
   return (
     <div className="dsmeta-card">
